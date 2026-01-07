@@ -1,5 +1,4 @@
-// Array de objetos com configuração da bateria
-// Nota: Para usar seus próprios sons, substitua as URLs pelos caminhos dos seus arquivos de áudio
+
 const dadosDrumKit = [
     {
         tecla: 'A',
@@ -33,13 +32,13 @@ const dadosDrumKit = [
     }
 ];
 
-// Função para criar e retornar um elemento de áudio
+
 const criarElementoAudio = (caminhoSom) => {
     const audio = new Audio(caminhoSom);
     return audio;
 };
 
-// Função para reproduzir o som e aplicar feedback visual
+
 const reproduzirSom = (dadosDrum, elementoDrumPad) => {
     try {
         const audio = criarElementoAudio(dadosDrum.som);
@@ -48,21 +47,21 @@ const reproduzirSom = (dadosDrum, elementoDrumPad) => {
             console.warn('Erro ao reproduzir áudio:', erro);
         });
         
-        // Adiciona classe de ativação para feedback visual
+
         elementoDrumPad.classList.add('ativo');
     } catch (erro) {
         console.error('Erro ao criar elemento de áudio:', erro);
     }
 };
 
-// Função para remover o destaque visual após a transição
+
 const removerClasseAtiva = (evento) => {
     if (evento.propertyName === 'transform') {
         evento.target.classList.remove('ativo');
     }
 };
 
-// Função para criar um botão de bateria
+
 const criarDrumPad = (dadosDrum) => {
     const drumPad = document.createElement('div');
     drumPad.className = 'drum-pad';
@@ -79,40 +78,40 @@ const criarDrumPad = (dadosDrum) => {
     drumPad.appendChild(elementoTecla);
     drumPad.appendChild(elementoNome);
     
-    // Adiciona evento de clique
+
     drumPad.addEventListener('click', () => {
         reproduzirSom(dadosDrum, drumPad);
     });
     
-    // Adiciona evento transitionend para remover classe ativo
+
     drumPad.addEventListener('transitionend', removerClasseAtiva);
     
     return drumPad;
 };
 
-// Função para encontrar o elemento do drum pad pela tecla
+
 const encontrarDrumPadPorTecla = (tecla) => {
     const teclaMinuscula = tecla.toLowerCase();
     return document.querySelector(`[data-key="${teclaMinuscula}"]`);
 };
 
-// Função para encontrar os dados do drum pela tecla
+
 const encontrarDadosDrumPorTecla = (tecla) => {
     const teclaMaiuscula = tecla.toUpperCase();
     return dadosDrumKit.find(drum => drum.tecla === teclaMaiuscula);
 };
 
-// Função principal para inicializar a bateria
+
 const inicializarDrumKit = () => {
     const containerDrumKit = document.getElementById('drum-kit');
     
-    // Renderiza os botões dinamicamente usando forEach
+
     dadosDrumKit.forEach(dadosDrum => {
         const drumPad = criarDrumPad(dadosDrum);
         containerDrumKit.appendChild(drumPad);
     });
     
-    // Adiciona evento de teclado global
+
     document.addEventListener('keydown', (evento) => {
         const dadosDrum = encontrarDadosDrumPorTecla(evento.key);
         const elementoDrumPad = encontrarDrumPadPorTecla(evento.key);
@@ -120,11 +119,11 @@ const inicializarDrumKit = () => {
         if (dadosDrum && elementoDrumPad) {
             reproduzirSom(dadosDrum, elementoDrumPad);
         }
-        // Se a tecla não estiver mapeada, não faz nada (tratamento de erro implícito)
+
     });
 };
 
-// Inicializa a bateria quando o DOM estiver pronto
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', inicializarDrumKit);
 } else {
